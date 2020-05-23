@@ -1091,6 +1091,18 @@ function _p9k_python_version() {
 ################################################################
 
 ################################################################
+# Custom prompt porting from p9k
+prompt_npm_lockfile() {
+  _p9k_upglob package-lock.json && return
+  _p9k_prompt_segment "$0" "white" 88 'LOCK_ICON' 0 '' "npm"
+  # for _p9k_prompt_segment usage, see _p9k_left_prompt_segment()
+}
+prompt_yarn_lockfile() {
+  _p9k_upglob yarn.lock && return
+  _p9k_prompt_segment "$0" "white" 24 'LOCK_ICON' 0 '' "yarn"
+}
+
+################################################################
 # Anaconda Environment
 prompt_anaconda() {
   local p=${CONDA_PREFIX:-$CONDA_ENV_PATH}
