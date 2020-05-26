@@ -430,7 +430,11 @@ function _p9k_init_icons() {
         OK_ICON                        '\uF00C'$s             # 
         FAIL_ICON                      '\uF00D'               # 
         SYMFONY_ICON                   '\uE757'               # 
-        NODE_ICON                      '\uE617 '              # 
+        # Note clear cache (~/.cache/p10k-*) to apply icon changes
+        # NODE_ICON                      '\uE617 '              # 
+        NODE_ICON                      '\uE718'               # 
+        LOCK_ICON                      '\uF023'               # 
+        # TODO set icon to global namespace
         NODEJS_ICON                    '\uE617 '              # 
         MULTILINE_FIRST_PROMPT_PREFIX  '\u256D\U2500'         # ╭─
         MULTILINE_NEWLINE_PROMPT_PREFIX '\u251C\U2500'        # ├─
