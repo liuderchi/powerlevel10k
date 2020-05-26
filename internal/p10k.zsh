@@ -1091,6 +1091,58 @@ function _p9k_python_version() {
 ################################################################
 
 ################################################################
+# Custom prompt porting from p9k
+prompt_git_config() {
+  # Show status of git config name, email, gpg option
+  # for _p9k_prompt_segment usage, see _p9k_left_prompt_segment()
+
+  # NOTE 4 types of result: match-github / match-work (x2) / undefined
+  if [[ $(git config commit.gpgsign) == 'true' ]] && \
+    ; then
+      if [[ $(git config user.email) == $EMAILS[1] ]] && \
+        [[ $(git config user.name) == $GH_LOGIN ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 22 'VCS_GIT_ICON' 0 '' ''
+      elif [[ $(git config user.email) == $EMAILS[2] ]] && \
+        [[ $(git config user.name) == $USER_NAME_FULL ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 166 'VCS_GIT_ICON' 0 '' ''
+      elif [[ $(git config user.email) == $EMAILS[3] ]] && \
+        [[ $(git config user.name) == $USER_NAME_FULL ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 129 'VCS_GIT_ICON' 0 '' ''
+      else
+        _p9k_prompt_segment "$0" "white" 88 'VCS_GIT_ICON' 0 '' "? user"
+      fi
+  else
+      _p9k_prompt_segment "$0" "white" 88 'VCS_GIT_ICON' 0 '' "?"
+  fi
+}
+prompt_npm() {
+  local _color=''
+  local _icon=''
+
+  if [[ $(npm config get registry) != $NPM_REGISTRY_PRIVATE ]]; then
+    _p9k_upglob package-lock.json && return
+    _color='88'
+  else
+    _color='129'
+  fi
+  if [ -f $(pwd)/package-lock.json ]; then
+    _icon='LOCK_ICON'
+  fi
+  _p9k_prompt_segment "$0" "white" "$_color" "$_icon" 0 '' "npm"
+}
+prompt_npm_lockfile() {
+  _p9k_upglob package-lock.json && return
+  _p9k_prompt_segment "$0" "white" 88 'LOCK_ICON' 0 '' "npm"
+}
+prompt_yarn_lockfile() {
+  _p9k_upglob yarn.lock && return
+  _p9k_prompt_segment "$0" "white" 24 'LOCK_ICON' 0 '' "yarn"
+}
+
+################################################################
 # Anaconda Environment
 prompt_anaconda() {
   local msg
