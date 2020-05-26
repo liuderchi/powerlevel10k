@@ -235,7 +235,7 @@ function _p9k_init_icons() {
         NORDVPN_ICON                   '\UF023'               # 
         EXECUTION_TIME_ICON            '\uF253'$s             # 
         SSH_ICON                       'ssh'
-        VPN_ICON                       '\uF023' 
+        VPN_ICON                       '\uF023'
         KUBERNETES_ICON                '\U2388'               # ⎈
         DROPBOX_ICON                   '\UF16B'$s             # 
         DATE_ICON                      '\uF073 '              # 
@@ -421,7 +421,11 @@ function _p9k_init_icons() {
         OK_ICON                        '\uF00C'$s             # 
         FAIL_ICON                      '\uF00D'               # 
         SYMFONY_ICON                   '\uE757'               # 
-        NODE_ICON                      '\uE617 '              # 
+        # Note clear cache (~/.cache/p10k-*) to apply icon changes
+        # NODE_ICON                      '\uE617 '              # 
+        NODE_ICON                      '\uE718'               # 
+        LOCK_ICON                      '\uF023'               # 
+        # TODO set icon to global namespace
         NODEJS_ICON                    '\uE617 '              # 
         MULTILINE_FIRST_PROMPT_PREFIX  '\u256D\U2500'         # ╭─
         MULTILINE_NEWLINE_PROMPT_PREFIX '\u251C\U2500'        # ├─
@@ -665,7 +669,7 @@ function _p9k_init_icons() {
         TEST_ICON                      ''
         TODO_ICON                      '\u2206'               # ∆
         BATTERY_ICON                   '\U1F50B'              # 🔋
-        DISK_ICON                      'hdd' 
+        DISK_ICON                      'hdd'
         OK_ICON                        '\u2714'               # ✔
         FAIL_ICON                      '\u2718'               # ✘
         SYMFONY_ICON                   'SF'
