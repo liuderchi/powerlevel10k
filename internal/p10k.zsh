@@ -1127,6 +1127,58 @@ function _p9k_python_version() {
 ################################################################
 
 ################################################################
+# Custom prompt porting from p9k
+prompt_git_config() {
+  # Show status of git config name, email, gpg option
+  # for _p9k_prompt_segment usage, see _p9k_left_prompt_segment()
+
+  # NOTE 4 types of result: match-github / match-work (x2) / undefined
+  if [[ $(git config commit.gpgsign) == 'true' ]] && \
+    ; then
+      if [[ $(git config user.email) == $EMAILS[1] ]] && \
+        [[ $(git config user.name) == $GH_LOGIN ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 22 'VCS_GIT_ICON' 0 '' ''
+      elif [[ $(git config user.email) == $EMAILS[2] ]] && \
+        [[ $(git config user.name) == $USER_NAME_FULL ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 166 'VCS_GIT_ICON' 0 '' ''
+      elif [[ $(git config user.email) == $EMAILS[3] ]] && \
+        [[ $(git config user.name) == $USER_NAME_FULL ]] && \
+        ; then
+          _p9k_prompt_segment "$0" "white" 129 'VCS_GIT_ICON' 0 '' ''
+      else
+        _p9k_prompt_segment "$0" "white" 88 'VCS_GIT_ICON' 0 '' "? user"
+      fi
+  else
+      _p9k_prompt_segment "$0" "white" 88 'VCS_GIT_ICON' 0 '' "?"
+  fi
+}
+prompt_npm() {
+  local _color=''
+  local _icon=''
+
+  if [[ $(npm config get registry) != $NPM_REGISTRY_PRIVATE ]]; then
+    _p9k_upglob package-lock.json && return
+    _color='88'
+  else
+    _color='129'
+  fi
+  if [ -f $(pwd)/package-lock.json ]; then
+    _icon='LOCK_ICON'
+  fi
+  _p9k_prompt_segment "$0" "white" "$_color" "$_icon" 0 '' "npm"
+}
+prompt_npm_lockfile() {
+  _p9k_upglob package-lock.json && return
+  _p9k_prompt_segment "$0" "white" 88 'LOCK_ICON' 0 '' "npm"
+}
+prompt_yarn_lockfile() {
+  _p9k_upglob yarn.lock && return
+  _p9k_prompt_segment "$0" "white" 24 'LOCK_ICON' 0 '' "yarn"
+}
+
+################################################################
 # Anaconda Environment
 prompt_anaconda() {
   local msg
@@ -1788,6 +1840,22 @@ prompt_dir() {
       local -a parts=("${(s:/:)p}")
     fi
   fi
+
+  # override $parts array with shrink_path when it's enabled
+  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/shrink-path#usage
+  if zstyle -t ':prompt:shrink_path' expand; then;
+  else
+    cwd_by_shrink_path=$(shrink_path -t -f -g -3)
+    parts=(${(@s:/:)cwd_by_shrink_path})
+  fi
+  _zsh_shrink_path_toggle() {
+    zstyle -t ':prompt:shrink_path' expand \
+      && zstyle -d ':prompt:shrink_path' expand \
+      || zstyle ':prompt:shrink_path' expand true
+
+    # known issue: visited dir path has been cached and would not be updated after toggled
+    # TODO clear p10k.zsh cache
+  }
 
   local -i fake_first=0 expand=0 shortenlen=${_POWERLEVEL9K_SHORTEN_DIR_LENGTH:--1}
 
